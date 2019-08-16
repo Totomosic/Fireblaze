@@ -29,21 +29,15 @@ project "Fireblaze-LoginServer"
         "../%{IncludeDirs.FreeType}",
         "../%{IncludeDirs.FreeTypeGL}",
         "../%{IncludeDirs.Lua}",
+        "../%{IncludeDirs.FireblazeUtils}",
         "src"
     }
 
     links
     {
-        (BoltLibDir .. "Bolt-Core\\Bolt-Core.lib"),
-        (BoltLibDir .. "FreeType\\FreeType.lib"),
-        (BoltLibDir .. "FreeType-GL\\FreeType-GL.lib"),
-        (BoltLibDir .. "Glad\\Glad.lib"),
-        (BoltLibDir .. "GLFW\\GLFW.lib"),
-        (BoltLibDir .. "ImGui\\ImGui.lib"),
-        (BoltLibDir .. "Lua\\Lua.lib"),
-        (BoltLibDir .. "GLFW\\GLFW.lib"),
         "opengl32.lib",
-        "ws2_32.lib"
+        "ws2_32.lib",
+        "Fireblaze-Utils"
     }
 
     filter "system:windows"

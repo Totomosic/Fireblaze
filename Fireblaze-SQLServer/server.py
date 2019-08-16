@@ -2,9 +2,8 @@ import mysql.connector
 import socket
 import threading
 
-CONFIG_FILE_PATH = "data/database.cfg"
-PORT = 3300
-HOST = "localhost"
+DATABASE_CONFIG_FILE_PATH = "../CommonData/FireblazeDB.cfg"
+SERVER_CONFIG_FILE_PATH = "../CommonData/SQLServer.cfg"
 
 def read_config_file(file):
     f = open(file, "r")
@@ -52,7 +51,11 @@ def client_handler(clientSocket, address, config):
     print("Closed connection from " + str(address))
 
 def main():
-    config = read_config_file(CONFIG_FILE_PATH)
+    config = read_config_file(DATABASE_CONFIG_FILE_PATH)
+    server_config = read_config_file(SERVER_CONFIG_FILE_PATH)
+
+    HOST = server_config["server_host"]
+    PORT = int(server_config["server_port"])
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((HOST, PORT))

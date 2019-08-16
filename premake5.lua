@@ -29,5 +29,8 @@ IncludeDirs["FreeTypeGL"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType-GL
 IncludeDirs["FreeType"] =   "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType\\include"
 IncludeDirs["Lua"] =        "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Lua\\src"
 
+IncludeDirs["FireblazeUtils"] = ProjectsDir .. "Fireblaze-Utils\\src"
+
+include (ProjectsDir .. "Fireblaze-Utils")
 include (ProjectsDir .. "Fireblaze")
 include (ProjectsDir .. "Fireblaze-LoginServer")

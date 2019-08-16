@@ -1,12 +1,12 @@
-project "Fireblaze"
+project "Fireblaze-Utils"
     location ""
-    kind "ConsoleApp"
+    kind "StaticLib"
     language "C++"
     cppdialect "C++17"
     staticruntime "on"
     
-    targetdir (SolutionDir .. "bin/" .. outputdir .. "/Fireblaze")
-    objdir (SolutionDir .. "bin-int/" .. outputdir .. "/Fireblaze")
+    targetdir (SolutionDir .. "bin/" .. outputdir .. "/Fireblaze-Utils")
+    objdir (SolutionDir .. "bin-int/" .. outputdir .. "/Fireblaze-Utils")
     
     files
     {
@@ -26,16 +26,21 @@ project "Fireblaze"
         "../%{IncludeDirs.FreeType}",
         "../%{IncludeDirs.FreeTypeGL}",
         "../%{IncludeDirs.Lua}",
-        "../%{IncludeDirs.FireblazeUtils}",
-        "src",
-        "../Firebase-LoginServer/src/Common"
+        "src"
     }
 
     links
     {
+        (BoltLibDir .. "Bolt-Core\\Bolt-Core.lib"),
+        (BoltLibDir .. "FreeType\\FreeType.lib"),
+        (BoltLibDir .. "FreeType-GL\\FreeType-GL.lib"),
+        (BoltLibDir .. "Glad\\Glad.lib"),
+        (BoltLibDir .. "GLFW\\GLFW.lib"),
+        (BoltLibDir .. "ImGui\\ImGui.lib"),
+        (BoltLibDir .. "Lua\\Lua.lib"),
+        (BoltLibDir .. "GLFW\\GLFW.lib"),
         "opengl32.lib",
-        "ws2_32.lib",
-        "Fireblaze-Utils"
+        "ws2_32.lib"
     }
 
     filter "system:windows"
