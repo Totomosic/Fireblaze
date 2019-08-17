@@ -28,13 +28,11 @@ project "Fireblaze"
         "../%{IncludeDirs.Lua}",
         "../%{IncludeDirs.FireblazeUtils}",
         "src",
-        "../Firebase-LoginServer/src/Common"
+        "../Fireblaze-LoginServer/src"
     }
 
     links
     {
-        "opengl32.lib",
-        "ws2_32.lib",
         "Fireblaze-Utils"
     }
 

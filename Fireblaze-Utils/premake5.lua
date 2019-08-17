@@ -38,9 +38,7 @@ project "Fireblaze-Utils"
         (BoltLibDir .. "GLFW\\GLFW.lib"),
         (BoltLibDir .. "ImGui\\ImGui.lib"),
         (BoltLibDir .. "Lua\\Lua.lib"),
-        (BoltLibDir .. "GLFW\\GLFW.lib"),
-        "opengl32.lib",
-        "ws2_32.lib"
+        (BoltLibDir .. "GLFW\\GLFW.lib")
     }
 
     filter "system:windows"

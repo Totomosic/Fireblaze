@@ -1,0 +1,1 @@
+call python src/server.py
