@@ -29,6 +29,7 @@ __pycache__/
 **.vcxproj*
 **.pack
 **.bres
+bin/
 bin-int/
 #Nuget packages folder
 packages/
