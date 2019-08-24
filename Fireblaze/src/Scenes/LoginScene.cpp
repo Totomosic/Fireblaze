@@ -1,7 +1,10 @@
 #include "LoginScene.h"
+#include "Utils/Clients/TcpRequestClient.h"
 
 namespace Fireblaze
 {
+
+	extern SocketAddress LoginServerAddress;
 
 	std::unique_ptr<Material> CreateBackgroundMaterial(const ResourcePtr<Texture2D>& backgroundTexture)
 	{
@@ -45,6 +48,17 @@ namespace Fireblaze
 		return material;
 	}
 
+	LoginResponse Login(const blt::string& username, const blt::string& password)
+	{
+		TcpRequestClient<RequestType> client;
+		client.Connect(LoginServerAddress);
+		LoginRequest request;
+		request.Username = username;
+		request.Password = password;
+		LoginResponse response = client.Request<LoginRequest, LoginResponse>(RequestType::LoginRequest, request);
+		return response;
+	}
+
 	void CreateLoginScene(Scene& scene, int width, int height, Scene& registerScene)
 	{
 		Camera* loginCamera = scene.CreateCamera(Projection::Orthographic(0, width, 0, height, -100, 100));
@@ -72,9 +86,64 @@ namespace Fireblaze
 		UISurface& registerButton = signInButton.CreateSurface(280, 50, Color(50, 50, 255), Transform({ 0, -60, 0 }));
 		UIText& registerText = registerButton.CreateText("Register", ResourceManager::Get().Fonts().Calibri(22), Color::Black, Transform({ 0, 0, 1 }), AlignH::Center);
 
+		loginLayer.UI().AddElementToTabList(&usernameBox);
+		loginLayer.UI().AddElementToTabList(&passwordBox);
+
+		std::function<void()> attemptToLogin = [&usernameBox, &passwordBox, &signInButton]()
+		{
+			UISurface& loadingIcon = signInButton.CreateSurface(25, 25, Color::Black, Transform({ 225, 0, 1 }));
+			Task t = TaskManager::Run([&usernameBox, &passwordBox, &loadingIcon]()
+				{
+					LoginResponse response = Login(usernameBox.GetText(), passwordBox.GetText());
+					if (response.FailReason == LoginFailReason::Ok)
+					{
+						loadingIcon.GetMesh().Materials[0]->GetLinkContext().Link("Color", Color::Green);
+					}
+					else
+					{
+						loadingIcon.GetMesh().Materials[0]->GetLinkContext().Link("Color", Color::Red);
+					}
+					Time::Get().RenderingTimeline().AddFunction(2.0, [&loadingIcon]()
+						{
+							loadingIcon.Remove();
+						});
+				});
+		};
+
 		registerButton.Events().OnClick.AddEventListener([&registerScene](Event<UIClickedEvent>& e)
 			{
 				SceneManager::Get().SetCurrentScene(registerScene);
+				e.StopPropagation();
+			});
+
+		usernameBox.Events().OnFocus.AddEventListener([&usernameBox](Event<UIFocusEvent>& e)
+			{
+				usernameBox.BackgroundElement().GetMesh().Materials[0]->GetLinkContext().Link("Color", Color(200, 200, 200));
+			});
+		usernameBox.Events().OnFocusLost.AddEventListener([&usernameBox](Event<UIFocusLostEvent>& e)
+			{
+				usernameBox.BackgroundElement().GetMesh().Materials[0]->GetLinkContext().Link("Color", Color(100, 100, 100));
+			});
+
+		passwordBox.Events().OnFocus.AddEventListener([&passwordBox](Event<UIFocusEvent>& e)
+			{
+				passwordBox.BackgroundElement().GetMesh().Materials[0]->GetLinkContext().Link("Color", Color(200, 200, 200));
+			});
+		passwordBox.Events().OnFocusLost.AddEventListener([&passwordBox](Event<UIFocusLostEvent>& e)
+			{
+				passwordBox.BackgroundElement().GetMesh().Materials[0]->GetLinkContext().Link("Color", Color(100, 100, 100));
+			});
+		passwordBox.Events().OnKeyUp.AddEventListener([&usernameBox, &passwordBox, attemptToLogin](Event<UIKeyUpEvent>& e)
+			{
+				if (e.Data.Key == Keycode::Enter)
+				{
+					attemptToLogin();
+					e.StopPropagation();
+				}
+			});
+		signInButton.Events().OnClick.AddEventListener([&usernameBox, &passwordBox, attemptToLogin](Event<UIClickedEvent>& e)
+			{
+				attemptToLogin();
 				e.StopPropagation();
 			});
 

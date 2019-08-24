@@ -28,7 +28,7 @@ namespace Fireblaze
 			});
 
 		m_Server.Bind(serverAddress);
-		m_Server.Listen(5);
+		m_Server.Listen(5, false);
 	}
 
 	void LoginServer::Update()

@@ -27,52 +27,60 @@ namespace Fireblaze
 			return m_Socket.Bind(address);
 		}
 
-		void Listen(int backlog)
+		void Listen(int backlog, bool spawnThread = true)
 		{
 			m_Socket.Listen(backlog);
-			TaskManager::Run([&server = m_Socket, &functions = m_Functions, &onConnect = m_OnConnect, &onDisconnect = m_OnDisconnect, &mutex = m_FunctionMutex]() mutable
+			auto listenFunc = [&server = m_Socket, &functions = m_Functions, &onConnect = m_OnConnect, &onDisconnect = m_OnDisconnect, &mutex = m_FunctionMutex]() mutable
+			{
+				SocketAddress from;
+				while (true)
 				{
-					SocketAddress from;
-					while (true)
+					TCPsocket client = server.Accept(&from);
+					Task t = TaskManager::Run(make_shared_function([client{ std::move(client) }, &functions, address{ std::move(from) }, &onConnect, &onDisconnect, &mutex]() mutable
 					{
-						TCPsocket client = server.Accept(&from);
-						TaskManager::Run(make_shared_function([client{ std::move(client) }, &functions, address{ std::move(from) }, &onConnect, &onDisconnect, &mutex]() mutable
+						if (onConnect)
+						{
+							std::scoped_lock<std::mutex> lock(mutex);
+							onConnect(client, address);
+						}
+						char buffer[4096];
+						while (true)
+						{
+							int received = client.Recv(buffer, sizeof(buffer));
+							if (received > 0)
 							{
-								if (onConnect)
+								InputMemoryStream data(received);
+								memcpy(data.GetBufferPtr(), buffer, received);
+								T key;
+								Deserialize(data, key);
+								if (functions.find(key) != functions.end())
 								{
 									std::scoped_lock<std::mutex> lock(mutex);
-									onConnect(client, address);
+									OutputMemoryStream response = functions.at(key)(data);
+									client.Send(response.GetBufferPtr(), response.GetRemainingDataSize());
 								}
-								char buffer[4096];
-								while (true)
-								{
-									int received = client.Recv(buffer, sizeof(buffer));
-									if (received > 0)
-									{
-										InputMemoryStream data(received);
-										memcpy(data.GetBufferPtr(), buffer, received);
-										T key;
-										Deserialize(data, key);
-										if (functions.find(key) != functions.end())
-										{
-											std::scoped_lock<std::mutex> lock(mutex);
-											OutputMemoryStream response = functions.at(key)(data);
-											client.Send(response.GetBufferPtr(), response.GetRemainingDataSize());
-										}
-									}
-									else
-									{
-										break;
-									}
-								}
-								if (onDisconnect)
-								{
-									std::scoped_lock<std::mutex> lock(mutex);
-									onDisconnect(client, address);
-								}
-							}));
-					}
-				});
+							}
+							else
+							{
+								break;
+							}
+						}
+						if (onDisconnect)
+						{
+							std::scoped_lock<std::mutex> lock(mutex);
+							onDisconnect(client, address);
+						}
+					}));
+				}
+			};
+			if (spawnThread)
+			{
+				Task t = TaskManager::Run(std::move(listenFunc));
+			}
+			else
+			{
+				listenFunc();
+			}
 		}
 
 		template<typename PacketT, typename ResponseT>
