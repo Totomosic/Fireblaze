@@ -12,6 +12,7 @@ namespace Fireblaze
 	FBL_API enum class RegisterAccountFailReason
 	{
 		Ok,
+		CannotConnect,
 		InvalidUsername,
 		InvalidPassword,
 		InvalidEmail,
@@ -24,7 +25,7 @@ namespace Fireblaze
 	struct FBL_API RegisterAccountResponse
 	{
 	public:
-		uint64_t AccountId = 0;
+		uint64_t AccountId = InvalidId;
 		RegisterAccountFailReason FailReason = RegisterAccountFailReason::InvalidUsername;
 	};
 
@@ -47,6 +48,7 @@ namespace Fireblaze
 	FBL_API enum class LoginFailReason
 	{
 		Ok,
+		CannotConnect,
 		InvalidUsername,
 		InvalidPassword,
 		AlreadyLoggedIn
@@ -58,7 +60,7 @@ namespace Fireblaze
 	struct FBL_API LoginResponse
 	{
 	public:
-		uint64_t AccountId = 0;
+		uint64_t AccountId = InvalidId;
 		LoginFailReason FailReason = LoginFailReason::InvalidUsername;
 	};
 
@@ -81,6 +83,7 @@ namespace Fireblaze
 	FBL_API enum class LogoutFailReason
 	{
 		Ok,
+		CannotConnect,
 		NotLoggedIn
 	};
 

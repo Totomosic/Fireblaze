@@ -27,6 +27,21 @@ namespace Fireblaze
 				return manager.Logout(request);
 			});
 
+		m_Server.RegisterHandler<GetCharactersRequest, GetCharactersResponse>(RequestType::GetCharactersRequest, [&manager = m_Manager](GetCharactersRequest& request)
+			{
+				return manager.GetCharacters(request);
+			});
+
+		m_Server.RegisterHandler<AddCharacterRequest, AddCharacterResponse>(RequestType::AddCharacterRequest, [&manager = m_Manager](AddCharacterRequest& request)
+			{
+				return manager.AddCharacter(request);
+			});
+
+		m_Server.RegisterHandler<DeleteCharacterRequest, DeleteCharacterResponse>(RequestType::DeleteCharacterRequest, [&manager = m_Manager](DeleteCharacterRequest& request)
+			{
+				return manager.DeleteCharacter(request);
+			});
+
 		m_Server.Bind(serverAddress);
 		m_Server.Listen(5, false);
 	}

@@ -5,6 +5,6 @@
 namespace Fireblaze
 {
 
-	void CreateRegisterScene(Scene& scene, int width, int height, Scene& loginScene);
+	FBL_API void CreateRegisterScene(Scene& scene, int width, int height, Scene& loginScene);
 
 }

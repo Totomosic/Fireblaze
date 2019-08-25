@@ -1,9 +1,11 @@
+#include "clientpch.h"
 #include "FireblazeClient.h"
 #include "Common/LoginRequests.h"
 #include "Common/LoginResponses.h"
 
 #include "Scenes/LoginScene.h"
 #include "Scenes/RegisterScene.h"
+#include "Scenes/CharacterSelectScene.h"
 
 namespace Fireblaze
 {
@@ -17,9 +19,11 @@ namespace Fireblaze
 
 		Scene& loginScene = SceneManager::Get().CreateScene(1);
 		Scene& registerScene = SceneManager::Get().CreateScene(1);
+		Scene& characterSelectScene = SceneManager::Get().CreateScene(1);
 
 		CreateRegisterScene(registerScene, Width(), Height(), loginScene);
-		CreateLoginScene(loginScene, Width(), Height(), registerScene);		
+		CreateLoginScene(loginScene, Width(), Height(), registerScene, characterSelectScene);	
+		CreateCharacterSelectScene(characterSelectScene, Width(), Height(), loginScene);
 
 		SceneManager::Get().SetCurrentScene(loginScene);
 	}

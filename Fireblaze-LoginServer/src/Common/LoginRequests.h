@@ -1,18 +1,8 @@
 #pragma once
-#include "fblpch.h"
+#include "Requests.h"
 
 namespace Fireblaze
 {
-
-	FBL_API enum class RequestType
-	{
-		RegisterAccountRequst,
-		LoginRequest,
-		LogoutRequest
-	};
-
-	FBL_DEFAULT_SERIALIZATION_FUNC_DEF(RequestType);
-	FBL_DEFAULT_DESERIALIZATION_FUNC_DEF(RequestType);
 
 	// ===========================================================================================================================================
 	// REGISTER ACCOUNT REQUEST

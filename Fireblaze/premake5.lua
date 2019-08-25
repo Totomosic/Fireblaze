@@ -7,6 +7,9 @@ project "Fireblaze"
     
     targetdir (SolutionDir .. "bin/" .. outputdir .. "/Fireblaze")
     objdir (SolutionDir .. "bin-int/" .. outputdir .. "/Fireblaze")
+
+    pchheader ("clientpch.h")
+    pchsource ("src/clientpch.cpp")
     
     files
     {

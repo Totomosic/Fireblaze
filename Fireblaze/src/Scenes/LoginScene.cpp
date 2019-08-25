@@ -1,5 +1,8 @@
+#include "clientpch.h"
 #include "LoginScene.h"
 #include "Utils/Clients/TcpRequestClient.h"
+
+#include "StateManager.h"
 
 namespace Fireblaze
 {
@@ -59,7 +62,7 @@ namespace Fireblaze
 		return response;
 	}
 
-	void CreateLoginScene(Scene& scene, int width, int height, Scene& registerScene)
+	void CreateLoginScene(Scene& scene, int width, int height, Scene& registerScene, Scene& characterSelectScene)
 	{
 		Camera* loginCamera = scene.CreateCamera(Projection::Orthographic(0, width, 0, height, -100, 100));
 		Layer& loginLayer = scene.CreateLayer(loginCamera, 100);
@@ -89,15 +92,17 @@ namespace Fireblaze
 		loginLayer.UI().AddElementToTabList(&usernameBox);
 		loginLayer.UI().AddElementToTabList(&passwordBox);
 
-		std::function<void()> attemptToLogin = [&usernameBox, &passwordBox, &signInButton]()
+		std::function<void()> attemptToLogin = [&usernameBox, &passwordBox, &signInButton, &characterSelectScene]()
 		{
 			UISurface& loadingIcon = signInButton.CreateSurface(25, 25, Color::Black, Transform({ 225, 0, 1 }));
-			Task t = TaskManager::Run([&usernameBox, &passwordBox, &loadingIcon]()
+			Task t = TaskManager::Run([&usernameBox, &passwordBox, &loadingIcon, &characterSelectScene]()
 				{
 					LoginResponse response = Login(usernameBox.GetText(), passwordBox.GetText());
 					if (response.FailReason == LoginFailReason::Ok)
 					{
 						loadingIcon.GetMesh().Materials[0]->GetLinkContext().Link("Color", Color::Green);
+						StateManager::Get().Session().SetAccountId(response.AccountId);
+						SceneManager::Get().SetCurrentScene(characterSelectScene);
 					}
 					else
 					{

@@ -23,9 +23,9 @@ namespace Fireblaze
 		
 	}
 
-	void SQLConnection::Connect(const SocketAddress& address)
+	int SQLConnection::Connect(const SocketAddress& address)
 	{
-		m_Socket.Connect(address);
+		return m_Socket.Connect(address);
 	}
 
 	void SQLConnection::Disconnect()

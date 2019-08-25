@@ -1,3 +1,4 @@
+#include "clientpch.h"
 #include "RegisterScene.h"
 #include "Utils/Clients/TcpRequestClient.h"
 

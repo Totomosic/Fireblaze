@@ -14,7 +14,7 @@ namespace Fireblaze
 		SQLConnection(const SocketAddress& address);
 		SQLConnection();
 
-		void Connect(const SocketAddress& address);
+		int Connect(const SocketAddress& address);
 		void Disconnect();
 
 		SQLQueryResult Execute(const blt::string& sqlQuery, bool logResponse = false);

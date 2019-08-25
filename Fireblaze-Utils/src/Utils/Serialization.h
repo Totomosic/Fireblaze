@@ -50,4 +50,26 @@ namespace Fireblaze
 		delete[] buffer;
 	}
 
+	template<typename T>
+	inline void Serialize(OutputMemoryStream& stream, const std::vector<T>& value)
+	{
+		Serialize(stream, value.size());
+		for (int i = 0; i < value.size(); i++)
+		{
+			Serialize(stream, value.at(i));
+		}
+	}
+
+	template<typename T>
+	inline void Deserialize(InputMemoryStream& stream, std::vector<T>& value)
+	{
+		std::vector<T>::size_type size;
+		Deserialize(stream, size);
+		value.resize(size);
+		for (int i = 0; i < size; i++)
+		{
+			Deserialize(stream, value[i]);
+		}
+	}
+
 }
