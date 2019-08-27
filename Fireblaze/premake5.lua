@@ -31,7 +31,8 @@ project "Fireblaze"
         "../%{IncludeDirs.Lua}",
         "../%{IncludeDirs.FireblazeUtils}",
         "src",
-        "../Fireblaze-LoginServer/src"
+        "../%{IncludeDirs.FireblazeLoginServer}",
+        "../%{IncludeDirs.FireblazeChatServer}"
     }
 
     links

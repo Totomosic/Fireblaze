@@ -9,7 +9,8 @@ namespace Fireblaze
 
 	UISurface& CreateCharacterBoxElement(const Vector2f& position, const Vector2f& size, UIElement& parent)
 	{
-		return parent.CreateSurface(size.x, size.y, Color::White, Transform({ position, 1 }));
+		UISurface& button = parent.CreateSurface(size.x, size.y, Color::White, Transform({ position, 1 }));
+		return button;
 	}
 
 	void CreateCharacterSelectScene(Scene& scene, int width, int height, Scene& loginScene)

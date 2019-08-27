@@ -30,7 +30,10 @@ IncludeDirs["FreeType"] =   "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType\\i
 IncludeDirs["Lua"] =        "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Lua\\src"
 
 IncludeDirs["FireblazeUtils"] = ProjectsDir .. "Fireblaze-Utils\\src"
+IncludeDirs["FireblazeLoginServer"] = ProjectsDir .. "Fireblaze-LoginServer\\src"
+IncludeDirs["FireblazeChatServer"] = ProjectsDir .. "Fireblaze-ChatServer\\src"
 
 include (ProjectsDir .. "Fireblaze-Utils")
 include (ProjectsDir .. "Fireblaze")
 include (ProjectsDir .. "Fireblaze-LoginServer")
+include (ProjectsDir .. "Fireblaze-ChatServer")
