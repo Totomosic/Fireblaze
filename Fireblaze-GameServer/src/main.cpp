@@ -1,5 +1,5 @@
-#include "fblpch.h"
-#include "LoginServer.h"
+#include "gspch.h"
+#include "GameServer.h"
 
 namespace Fireblaze
 {
@@ -35,8 +35,7 @@ int main(int argc, char** argv)
 	EngineCreateInfo info;
 	info.UseGraphics = false;
 	Engine e(info);
-	e.SetApplication<Fireblaze::LoginServer>();
+	e.SetApplication<Fireblaze::GameServer>();
 	e.Run();
-	
 	return 0;
 }

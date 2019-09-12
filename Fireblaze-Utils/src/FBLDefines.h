@@ -1,6 +1,13 @@
 #pragma once
+
+namespace Fireblaze
+{
+
+	extern blt::string FireblazeCommonDataDirectory;
+
+}
+
 #define FBL_API
-#define FIREBLAZE_COMMON_DATA_DIRECTORY "../CommonData/"
-#define FIREBLAZE_SQL_SERVER_CONFIG_FILE blt::string(FIREBLAZE_COMMON_DATA_DIRECTORY) + "SQLServer.cfg"
-#define FIREBLAZE_LOGIN_SERVER_CONFIG_FILE blt::string(FIREBLAZE_COMMON_DATA_DIRECTORY) + "LoginServer.cfg"
-#define FIREBLAZE_CHAT_SERVER_CONFIG_FILE blt::string(FIREBLAZE_COMMON_DATA_DIRECTORY) + "ChatServer.cfg"
+#define FIREBLAZE_SQL_SERVER_CONFIG_FILE FireblazeCommonDataDirectory + "SQLServer.cfg"
+#define FIREBLAZE_LOGIN_SERVER_CONFIG_FILE FireblazeCommonDataDirectory + "LoginServer.cfg"
+#define FIREBLAZE_CHAT_SERVER_CONFIG_FILE FireblazeCommonDataDirectory + "ChatServer.cfg"

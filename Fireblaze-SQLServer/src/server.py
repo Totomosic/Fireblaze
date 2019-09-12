@@ -1,15 +1,17 @@
 import mysql.connector
 import socket
 import threading
+import sys
+import os
 
 CONFIG_DIRECTORY_PATH = "../CommonData/"
-DATABASE_CONFIG_FILE_PATH = CONFIG_DIRECTORY_PATH + "FireblazeDB.cfg"
-SERVER_CONFIG_FILE_PATH = CONFIG_DIRECTORY_PATH + "SQLServer.cfg"
+DATABASE_CONFIG_FILE_PATH = "FireblazeDB.cfg"
+SERVER_CONFIG_FILE_PATH = "SQLServer.cfg"
 
 console_lock = threading.Lock()
 
 def read_config_file(file):
-    f = open(file, "r")
+    f = open(os.path.join(CONFIG_DIRECTORY_PATH, file), "r")
     result = {}
     data = f.read()
     lines = data.split('\n')
@@ -122,6 +124,9 @@ def listen_thread(server, config):
         threading.Thread(target=client_handler, args=(clientSocket, address, config)).start()
 
 def main():
+    global CONFIG_DIRECTORY_PATH
+    if len(sys.argv) == 2:
+        CONFIG_DIRECTORY_PATH = sys.argv[1]
     config = read_config_file(DATABASE_CONFIG_FILE_PATH)
     server_config = read_config_file(SERVER_CONFIG_FILE_PATH)
 

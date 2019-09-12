@@ -6,6 +6,8 @@
 #include "Scenes/LoginScene.h"
 #include "Scenes/RegisterScene.h"
 #include "Scenes/CharacterSelectScene.h"
+#include "Scenes/CharacterCreateScene.h"
+#include "Scenes/CreateGameScene.h"
 
 namespace Fireblaze
 {
@@ -20,10 +22,14 @@ namespace Fireblaze
 		Scene& loginScene = SceneManager::Get().CreateScene(1);
 		Scene& registerScene = SceneManager::Get().CreateScene(1);
 		Scene& characterSelectScene = SceneManager::Get().CreateScene(1);
+		Scene& characterCreateScene = SceneManager::Get().CreateScene(1);
+		Scene& gameScene = SceneManager::Get().CreateScene(4);
 
 		CreateRegisterScene(registerScene, Width(), Height(), loginScene);
 		CreateLoginScene(loginScene, Width(), Height(), registerScene, characterSelectScene);	
-		CreateCharacterSelectScene(characterSelectScene, Width(), Height(), loginScene);
+		CreateCharacterSelectScene(characterSelectScene, Width(), Height(), loginScene, characterCreateScene, gameScene);
+		CreateCharacterCreateScene(characterCreateScene, Width(), Height(), characterSelectScene);
+		CreateGameScene(gameScene, Width(), Height(), loginScene, characterSelectScene);
 
 		SceneManager::Get().SetCurrentScene(loginScene);
 	}

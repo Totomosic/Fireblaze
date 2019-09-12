@@ -12,7 +12,7 @@ namespace Fireblaze
 		Camera* registerCamera = scene.CreateCamera(Projection::Orthographic(0, width, 0, height, -100, 100));
 		Layer& registerLayer = scene.CreateLayer(registerCamera, 100);
 
-		UISurface& registerBackdrop = registerLayer.UI().Root().CreateSurface(400, 600, Color(200, 190, 200), Transform({ width / 2.0f, height / 2.0f, -90 }));
+		UIRectangle& registerBackdrop = registerLayer.UI().Root().CreateRectangle(400, 600, Color(200, 190, 200), Transform({ width / 2.0f, height / 2.0f, -90 }));
 		UIText& title = registerBackdrop.CreateText("Fireblaze", ResourceManager::Get().Fonts().Verdana(48), Color::Black, Transform({ 0, 200, 1 }), AlignH::Center);
 
 		UITextInput& usernameBox = registerBackdrop.CreateTextInput(300, 50, Color(100, 100, 100), ResourceManager::Get().Fonts().Calibri(20), Color::Black, Transform({ 0, 100, 1 }));
@@ -24,8 +24,10 @@ namespace Fireblaze
 		UITextInput& emailBox = passwordConfirmBox.CreateTextInput(300, 50, Color(100, 100, 100), ResourceManager::Get().Fonts().Calibri(20), Color::Black, Transform({ 0, -90, 0 }));
 		UIText& emailText = emailBox.CreateText("Email:", ResourceManager::Get().Fonts().Calibri(16), Color::Black, Transform({ -150, 32, 0 }), AlignH::Left, AlignV::Bottom);
 
-		UISurface& registerButton = emailBox.CreateSurface(280, 50, Color(50, 50, 255), Transform({ 0, -75, 0 }));
+		UIRectangle& registerButton = emailBox.CreateRectangle(280, 40, Color(50, 50, 255), Transform({ 0, -60, 0 }));
 		UIText& registerText = registerButton.CreateText("Register", ResourceManager::Get().Fonts().Calibri(22), Color::Black, Transform({ 0, 0, 1 }), AlignH::Center);
+		UIRectangle& cancelButton = registerButton.CreateRectangle(280, 40, Color(255, 30, 30), Transform({ 0, -50, 0 }));
+		UIText& cancelText = cancelButton.CreateText("Cancel", ResourceManager::Get().Fonts().Calibri(22), Color::Black, Transform({ 0, 0, 1 }));
 
 		std::function<void()> handleRegister = [&loginScene, &usernameBox, &passwordBox, &passwordConfirmBox, &emailBox]()
 		{
@@ -52,6 +54,12 @@ namespace Fireblaze
 		registerButton.Events().OnClick.AddEventListener([handleRegister](Event<UIClickedEvent>& e)
 			{
 				handleRegister();
+				e.StopPropagation();
+			});
+
+		cancelButton.Events().OnClick.AddEventListener([&loginScene](Event<UIClickedEvent>& e)
+			{
+				SceneManager::Get().SetCurrentScene(loginScene);
 				e.StopPropagation();
 			});
 

@@ -67,7 +67,7 @@ namespace Fireblaze
 		Camera* loginCamera = scene.CreateCamera(Projection::Orthographic(0, width, 0, height, -100, 100));
 		Layer& loginLayer = scene.CreateLayer(loginCamera, 100);
 
-		UISurface& background = loginLayer.UI().Root().CreateSurface(width, height, Color::Black, Transform({ width / 2.0f, height / 2.0f, -90 }));
+		UIRectangle& background = loginLayer.UI().Root().CreateRectangle(width, height, Color::Black, Transform({ width / 2.0f, height / 2.0f, -90 }));
 
 		ResourceManager::Get().LoadPack("res/resources.pack", [&background](const ResourcePack& pack)
 			{
@@ -75,7 +75,7 @@ namespace Fireblaze
 				background.GetGameObject()->mesh().Mesh.Materials[0] = CreateBackgroundMaterial(resources.GetResourcePtr<Texture2D>("FireTitle8x8"));
 			});
 
-		UISurface& loginBackdrop = background.CreateSurface(400, 600, Color(200, 190, 200, 200), Transform({ 0, 0, 1 }));
+		UIRectangle& loginBackdrop = background.CreateRectangle(400, 600, Color(200, 190, 200, 200), Transform({ 0, 0, 1 }));
 		UIText& title = loginBackdrop.CreateText("Fireblaze", ResourceManager::Get().Fonts().Verdana(48), Color::Black, Transform({ 0, 200, 1 }), AlignH::Center);
 
 		UITextInput& usernameBox = loginBackdrop.CreateTextInput(300, 50, Color(100, 100, 100), ResourceManager::Get().Fonts().Calibri(20), Color::Black, Transform({ 0, 50, 1 }));
@@ -84,9 +84,9 @@ namespace Fireblaze
 		UIText& passwordText = passwordBox.CreateText("Password:", ResourceManager::Get().Fonts().Calibri(16), Color::Black, Transform({ -150, 32, 0 }), AlignH::Left, AlignV::Bottom);
 		passwordBox.SetObfuscating(true);
 
-		UISurface& signInButton = passwordBox.CreateSurface(280, 50, Color(50, 255, 50), Transform({ 0, -110, 0 }));
+		UIRectangle& signInButton = passwordBox.CreateRectangle(280, 50, Color(50, 255, 50), Transform({ 0, -110, 0 }));
 		UIText& signInText = signInButton.CreateText("Sign in", ResourceManager::Get().Fonts().Calibri(22), Color::Black, Transform({ 0, 0, 1 }), AlignH::Center);
-		UISurface& registerButton = signInButton.CreateSurface(280, 50, Color(50, 50, 255), Transform({ 0, -60, 0 }));
+		UIRectangle& registerButton = signInButton.CreateRectangle(280, 50, Color(50, 50, 255), Transform({ 0, -60, 0 }));
 		UIText& registerText = registerButton.CreateText("Register", ResourceManager::Get().Fonts().Calibri(22), Color::Black, Transform({ 0, 0, 1 }), AlignH::Center);
 
 		loginLayer.UI().AddElementToTabList(&usernameBox);
@@ -94,7 +94,7 @@ namespace Fireblaze
 
 		std::function<void()> attemptToLogin = [&usernameBox, &passwordBox, &signInButton, &characterSelectScene]()
 		{
-			UISurface& loadingIcon = signInButton.CreateSurface(25, 25, Color::Black, Transform({ 225, 0, 1 }));
+			UIRectangle& loadingIcon = signInButton.CreateRectangle(25, 25, Color::Black, Transform({ 165, 0, 1 }));
 			Task t = TaskManager::Run([&usernameBox, &passwordBox, &loadingIcon, &characterSelectScene]()
 				{
 					LoginResponse response = Login(usernameBox.GetText(), passwordBox.GetText());

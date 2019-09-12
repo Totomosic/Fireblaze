@@ -31,9 +31,14 @@ IncludeDirs["Lua"] =        "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Lua\\src"
 
 IncludeDirs["FireblazeUtils"] = ProjectsDir .. "Fireblaze-Utils\\src"
 IncludeDirs["FireblazeLoginServer"] = ProjectsDir .. "Fireblaze-LoginServer\\src"
+IncludeDirs["FireblazeGameServer"] = ProjectsDir .. "Fireblaze-GameServer\\src"
 IncludeDirs["FireblazeChatServer"] = ProjectsDir .. "Fireblaze-ChatServer\\src"
 
+group ("Utils")
 include (ProjectsDir .. "Fireblaze-Utils")
+group ("Clients")
 include (ProjectsDir .. "Fireblaze")
+group ("Servers")
 include (ProjectsDir .. "Fireblaze-LoginServer")
+include (ProjectsDir .. "Fireblaze-GameServer")
 include (ProjectsDir .. "Fireblaze-ChatServer")

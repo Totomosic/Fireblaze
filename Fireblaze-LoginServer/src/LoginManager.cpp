@@ -120,7 +120,7 @@ namespace Fireblaze
 		if (AttemptReconnect())
 		{
 			response.FailReason = GetCharactersFailReason::InvalidAccount;
-			blt::string query = "SELECT Characters.CharacterId, Name, Level FROM Characters JOIN CharacterAccountMap ON Characters.CharacterId = CharacterAccountMap.CharacterId WHERE Characters.AccountId = \"" + std::to_string(request.AccountId) + '"';
+			blt::string query = "SELECT Characters.CharacterId, Name, Level FROM Characters JOIN CharacterAccountMap ON Characters.CharacterId = CharacterAccountMap.CharacterId WHERE CharacterAccountMap.AccountId = " + std::to_string(request.AccountId);
 			SQLQueryResult result = m_Connection.Execute(query, true);
 			if (result.Status == SQLQueryStatus::Ok)
 			{
@@ -159,12 +159,18 @@ namespace Fireblaze
 				if (result.Status == SQLQueryStatus::Ok)
 				{
 					uint64_t characterId = std::atoi(result.Table.GetRow(0).GetValue(0).c_str());
-					CharacterOverviewData data;
-					data.CharacterId = characterId;
-					data.Name = request.CreateData.Name;
-					data.Level = request.CreateData.Level;
-					response.Character = data;
-					response.FailReason = AddCharacterFailReason::Ok;
+					blt::string query = "INSERT INTO CharacterAccountMap (AccountId, CharacterId, Created) VALUES(" + std::to_string(request.AccountId) + ", " + std::to_string(characterId) + ", " + "NOW())";
+					SQLQueryResult result = m_Connection.Execute(query);
+					if (result.Status == SQLQueryStatus::Ok)
+					{
+						m_Connection.CommitChanges();
+						CharacterOverviewData data;
+						data.CharacterId = characterId;
+						data.Name = request.CreateData.Name;
+						data.Level = request.CreateData.Level;
+						response.Character = data;
+						response.FailReason = AddCharacterFailReason::Ok;
+					}
 				}
 			}
 			return response;
