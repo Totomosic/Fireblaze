@@ -11,26 +11,8 @@ namespace Fireblaze
 
 	std::unique_ptr<Material> CreateBackgroundMaterial(const ResourcePtr<Texture2D>& backgroundTexture)
 	{
-		BasicMaterialGraph graph;
-		PropertyNode& texture = graph.AddProperty("Texture", backgroundTexture);
-		PropertyNode& texCoordTransform = graph.AddProperty("Transform", Matrix3f::Identity());
-		SampleTextureNode& sampler = graph.AddNode<SampleTextureNode>();
-
-		Vec3Node& coords = graph.AddNode<Vec3Node>();
-		coords.SetXY(graph.GetContext().VertexTexCoord().GetValue());
-		coords.SetZ(graph.AddNode(std::make_unique<ConstantFloatNode>(1.0f)).GetValue());
-		MultiplyNode& mul = graph.AddNode<MultiplyNode>();
-		mul.SetInputA(texCoordTransform.GetValue());
-		mul.SetInputB(coords.GetValue());
-		SplitVec3Node& splitter = graph.AddNode<SplitVec3Node>();
-		splitter.SetInput(mul.GetResult());
-
-		sampler.SetTexture(texture.GetValue());
-		sampler.SetTexCoord(splitter.GetRG());
-		graph.SetRGB(sampler.GetRGB());
-		graph.SetAlpha(sampler.GetA());
-		graph.Build();
-		std::unique_ptr<Material> material = graph.GetMaterial();
+		MaterialFileReader reader("res/login.shader");
+		std::unique_ptr<Material> material = reader.BuildMaterial();
 		material->SetIsTransparent(true);
 
 		material->GetLinkContext().Link("Transform", [currentTime = 0.0f]() mutable
@@ -47,6 +29,8 @@ namespace Fireblaze
 				result = result * Matrix3f::Scale(1.0f / (float)maxCols, 1.0f / (float)maxRows, 1.0f);
 				return result;
 			});
+
+		material->GetLinkContext().Link("Texture", backgroundTexture);
 
 		return material;
 	}
