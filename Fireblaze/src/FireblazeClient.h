@@ -8,6 +8,7 @@ namespace Fireblaze
 	{
 	public:
 		void Init() override;
+		void Tick() override;
 		void Update() override;
 		void Render() override;
 		void Exit() override;

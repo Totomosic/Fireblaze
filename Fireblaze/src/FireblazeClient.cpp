@@ -34,6 +34,11 @@ namespace Fireblaze
 		SceneManager::Get().SetCurrentScene(loginScene);
 	}
 
+	void FireblazeClient::Tick()
+	{
+		BLT_TRACE("Allocated Bytes {0} Average Allocation {1}", CustomAllocator::GetAllocatedBytes(), (float)CustomAllocator::GetAllocatedBytes() / (float)CustomAllocator::GetAllocationCount());
+	}
+
 	void FireblazeClient::Update()
 	{
 	
