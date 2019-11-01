@@ -8,37 +8,36 @@ workspace "Fireblaze"
         "Dist"
     }
 
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+-- Path to directory containing Bolt-Core
+InstallDir = "Bolt/"
 
--- Solution Directory
-SolutionDir = "..\\"
--- Bolt Directory
-BoltDir = "..\\Bolt\\Bolt-Engine\\"
-BoltLibDir = "..\\..\\..\\Bolt\\bin\\Debug-windows-x86_64\\"
--- Projects Directory
-ProjectsDir = ""
+include (InstallDir .. "Paths.lua")
 
--- Include directories relative to solutions directory
-IncludeDirs = {}
-IncludeDirs["Bolt"] =       "..\\" .. BoltDir .. "Bolt-Core\\src"
-IncludeDirs["GLFW"] =       "..\\" .. BoltDir .. "Bolt-Core\\vendor\\GLFW\\include"
-IncludeDirs["Glad"] =       "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Glad\\include"
-IncludeDirs["ImGui"] =      "..\\" .. BoltDir .. "Bolt-Core\\vendor\\ImGui"
-IncludeDirs["spdlog"] =     "..\\" .. BoltDir .. "Bolt-Core\\vendor\\spdlog\\include"
-IncludeDirs["FreeTypeGL"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType-GL"
-IncludeDirs["FreeType"] =   "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType\\include"
-IncludeDirs["Lua"] =        "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Lua\\src"
+group("Resources")
+include (InstallDir .. ResourcesDir .. "Converter")
+group ("Bolt/Vendor")
+include (InstallDir .. BoltDir .. "vendor/GLFW")
+include (InstallDir .. BoltDir .. "vendor/Glad")
+include (InstallDir .. BoltDir .. "vendor/ImGui")
+include (InstallDir .. BoltDir .. "vendor/spdlog")
+include (InstallDir .. BoltDir .. "vendor/FreeType")
+include (InstallDir .. BoltDir .. "vendor/FreeType-GL")
+include (InstallDir .. BoltDir .. "vendor/Lua")
+group("Bolt/Vendor/Python")
+include (InstallDir .. BoltDir .. "vendor/Python/cpython/PCBuild")
+group ("Bolt")
+include (InstallDir .. BoltDir)
 
-IncludeDirs["FireblazeUtils"] = ProjectsDir .. "Fireblaze-Utils\\src"
-IncludeDirs["FireblazeLoginServer"] = ProjectsDir .. "Fireblaze-LoginServer\\src"
-IncludeDirs["FireblazeGameServer"] = ProjectsDir .. "Fireblaze-GameServer\\src"
-IncludeDirs["FireblazeChatServer"] = ProjectsDir .. "Fireblaze-ChatServer\\src"
+IncludeDirs["FireblazeUtils"] = "Fireblaze-Utils/src"
+IncludeDirs["FireblazeLoginServer"] = "Fireblaze-LoginServer/src"
+IncludeDirs["FireblazeGameServer"] = "Fireblaze-GameServer/src"
+IncludeDirs["FireblazeChatServer"] = "Fireblaze-ChatServer/src"
 
-group ("Utils")
-include (ProjectsDir .. "Fireblaze-Utils")
-group ("Clients")
-include (ProjectsDir .. "Fireblaze")
-group ("Servers")
-include (ProjectsDir .. "Fireblaze-LoginServer")
-include (ProjectsDir .. "Fireblaze-GameServer")
-include (ProjectsDir .. "Fireblaze-ChatServer")
+group ("Fireblaze/Utils")
+include ("Fireblaze-Utils")
+group ("Fireblaze/Clients")
+include ("Fireblaze")
+group ("Fireblaze/Servers")
+include ("Fireblaze-LoginServer")
+include ("Fireblaze-GameServer")
+include ("Fireblaze-ChatServer")

@@ -1,65 +1,75 @@
-project "Fireblaze"
-    location ""
-    kind "ConsoleApp"
-    language "C++"
-    cppdialect "C++17"
-    staticruntime "on"
-    
-    targetdir (SolutionDir .. "bin/" .. outputdir .. "/Fireblaze")
-    objdir (SolutionDir .. "bin-int/" .. outputdir .. "/Fireblaze")
+do
+    local ProjectName = "Fireblaze"
+    local BuildDir = "../bin/" .. outputdir .. "/" .. ProjectName
+    local ObjDir = "../bin-int/" .. outputdir .. "/" .. ProjectName
 
-    pchheader ("clientpch.h")
-    pchsource ("src/clientpch.cpp")
-    
-    files
-    {
-        "src/**.h",
-        "src/**.cpp",
-        "src/**.hpp",
-        "src/**.c"
-    }
-    
-    includedirs
-    {
-        "../%{IncludeDirs.Bolt}",
-        "../%{IncludeDirs.GLFW}",
-        "../%{IncludeDirs.Glad}",
-        "../%{IncludeDirs.ImGui}",
-        "../%{IncludeDirs.spdlog}",
-        "../%{IncludeDirs.FreeType}",
-        "../%{IncludeDirs.FreeTypeGL}",
-        "../%{IncludeDirs.Lua}",
-        "../%{IncludeDirs.FireblazeUtils}",
-        "src",
-        "../%{IncludeDirs.FireblazeLoginServer}",
-        "../%{IncludeDirs.FireblazeChatServer}"
-    }
+    -- Path to Bolt install dir from project dir
+    local BoltInstallDir = "../Bolt/"
 
-    links
-    {
-        "Fireblaze-Utils"
-    }
+    project (ProjectName)
+        location ""
+        kind "ConsoleApp"
+        language "C++"
+        cppdialect "C++17"
+        staticruntime "on"
+        
+        targetdir (BuildDir)
+        objdir (ObjDir)
 
-    filter "system:windows"
-        systemversion "latest"
-
-        defines
+        pchheader "clientpch.h"
+        pchsource "src/clientpch.cpp"
+        
+        files
         {
-            "BLT_PLATFORM_WINDOWS",
-            "BLT_BUILD_STATIC"
+            "src/**.h",
+            "src/**.hpp",
+            "src/**.cpp"
+        }
+        
+        includedirs
+        {
+            BoltInstallDir .. "%{IncludeDirs.GLFW}",
+            BoltInstallDir .. "%{IncludeDirs.Glad}",
+            BoltInstallDir .. "%{IncludeDirs.ImGui}",
+            BoltInstallDir .. "%{IncludeDirs.spdlog}",
+            BoltInstallDir .. "%{IncludeDirs.FreeTypeGL}",
+            BoltInstallDir .. "%{IncludeDirs.FreeType}",
+            BoltInstallDir .. "%{IncludeDirs.Lua}",
+            BoltInstallDir .. "%{IncludeDirs.Python}",
+            BoltInstallDir .. "%{IncludeDirs.Bolt}",
+            "../%{IncludeDirs.FireblazeLoginServer}",
+            "../%{IncludeDirs.FireblazeChatServer}",
+            "../%{IncludeDirs.FireblazeUtils}",
+            "src"
         }
 
-    filter "configurations:Debug"
-        defines "BLT_DEBUG"
-        runtime "Debug"
-        symbols "on"
+        links
+        {
+            "Fireblaze-Utils"
+        }
 
-    filter "configurations:Release"
-        defines "BLT_RELEASE"
-        runtime "Release"
-        optimize "on"
+        filter "system:windows"
+            systemversion "latest"
 
-    filter "configurations:Dist"
-        defines "BLT_DIST"
-        runtime "Release"
-        optimize "on"
+            defines
+            {
+                "BLT_PLATFORM_WINDOWS",
+                "BLT_BUILD_STATIC",
+                "_CRT_SECURE_NO_WARNINGS",
+            }
+
+        filter "configurations:Debug"
+            defines "BLT_DEBUG"
+            runtime "Debug"
+            symbols "on"
+
+        filter "configurations:Release"
+            defines "BLT_RELEASE"
+            runtime "Release"
+            optimize "on"
+
+        filter "configurations:Dist"
+            defines "BLT_DIST"
+            runtime "Release"
+            optimize "on"
+end

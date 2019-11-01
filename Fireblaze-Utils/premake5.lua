@@ -1,66 +1,69 @@
-project "Fireblaze-Utils"
-    location ""
-    kind "StaticLib"
-    language "C++"
-    cppdialect "C++17"
-    staticruntime "on"
-    
-    targetdir (SolutionDir .. "bin/" .. outputdir .. "/Fireblaze-Utils")
-    objdir (SolutionDir .. "bin-int/" .. outputdir .. "/Fireblaze-Utils")
-    
-    files
-    {
-        "src/**.h",
-        "src/**.cpp",
-        "src/**.hpp",
-        "src/**.c"
-    }
-    
-    includedirs
-    {
-        "../%{IncludeDirs.Bolt}",
-        "../%{IncludeDirs.GLFW}",
-        "../%{IncludeDirs.Glad}",
-        "../%{IncludeDirs.ImGui}",
-        "../%{IncludeDirs.spdlog}",
-        "../%{IncludeDirs.FreeType}",
-        "../%{IncludeDirs.FreeTypeGL}",
-        "../%{IncludeDirs.Lua}",
-        "src"
-    }
+do
+    local ProjectName = "Fireblaze-Utils"
+    local BuildDir = "../bin/" .. outputdir .. "/" .. ProjectName
+    local ObjDir = "../bin-int/" .. outputdir .. "/" .. ProjectName
 
-    links
-    {
-        (BoltLibDir .. "Bolt-Core\\Bolt-Core.lib"),
-        (BoltLibDir .. "FreeType\\FreeType.lib"),
-        (BoltLibDir .. "FreeType-GL\\FreeType-GL.lib"),
-        (BoltLibDir .. "Glad\\Glad.lib"),
-        (BoltLibDir .. "GLFW\\GLFW.lib"),
-        (BoltLibDir .. "ImGui\\ImGui.lib"),
-        (BoltLibDir .. "Lua\\Lua.lib"),
-        (BoltLibDir .. "GLFW\\GLFW.lib")
-    }
+    -- Path to Bolt install dir from project dir
+    local BoltInstallDir = "../Bolt/"
 
-    filter "system:windows"
-        systemversion "latest"
-
-        defines
+    project (ProjectName)
+        location ""
+        kind "StaticLib"
+        language "C++"
+        cppdialect "C++17"
+        staticruntime "on"
+        
+        targetdir (BuildDir)
+        objdir (ObjDir)
+        
+        files
         {
-            "BLT_PLATFORM_WINDOWS",
-            "BLT_BUILD_STATIC"
+            "src/**.h",
+            "src/**.hpp",
+            "src/**.cpp"
+        }
+        
+        includedirs
+        {
+            BoltInstallDir .. "%{IncludeDirs.GLFW}",
+            BoltInstallDir .. "%{IncludeDirs.Glad}",
+            BoltInstallDir .. "%{IncludeDirs.ImGui}",
+            BoltInstallDir .. "%{IncludeDirs.spdlog}",
+            BoltInstallDir .. "%{IncludeDirs.FreeTypeGL}",
+            BoltInstallDir .. "%{IncludeDirs.FreeType}",
+            BoltInstallDir .. "%{IncludeDirs.Lua}",
+            BoltInstallDir .. "%{IncludeDirs.Python}",
+            BoltInstallDir .. "%{IncludeDirs.Bolt}",
+            "src"
         }
 
-    filter "configurations:Debug"
-        defines "BLT_DEBUG"
-        runtime "Debug"
-        symbols "on"
+        links
+        {
+            "Bolt-Core"
+        }
 
-    filter "configurations:Release"
-        defines "BLT_RELEASE"
-        runtime "Release"
-        optimize "on"
+        filter "system:windows"
+            systemversion "latest"
 
-    filter "configurations:Dist"
-        defines "BLT_DIST"
-        runtime "Release"
-        optimize "on"
+            defines
+            {
+                "BLT_PLATFORM_WINDOWS",
+                "BLT_BUILD_STATIC",
+                "_CRT_SECURE_NO_WARNINGS",
+            }
+
+        filter "configurations:Debug"
+            defines "BLT_DEBUG"
+            runtime "Debug"
+            symbols "on"
+
+        filter "configurations:Release"
+            defines "BLT_RELEASE"
+            runtime "Release"
+            optimize "on"
+
+        filter "configurations:Dist"
+            defines "BLT_DIST"
+            runtime "Release"
+            optimize "on"
+end

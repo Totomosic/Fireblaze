@@ -1,2 +1,2 @@
-call vendor\bin\premake\premake5.exe vs2017
+call "Bolt/vendor/bin/premake/premake5" vs2019
 PAUSE
