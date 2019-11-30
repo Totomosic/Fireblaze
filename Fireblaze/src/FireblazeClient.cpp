@@ -9,6 +9,8 @@
 #include "Scenes/CharacterCreateScene.h"
 #include "Scenes/CreateGameScene.h"
 
+#include "GameInstance.h"
+
 namespace Fireblaze
 {
 
@@ -36,12 +38,15 @@ namespace Fireblaze
 
 	void FireblazeClient::Tick()
 	{
-		BLT_TRACE("Allocated Bytes {0} Average Allocation {1}", CustomAllocator::GetAllocatedBytes(), (float)CustomAllocator::GetAllocatedBytes() / (float)CustomAllocator::GetAllocationCount());
+		
 	}
 
 	void FireblazeClient::Update()
 	{
-	
+		if (GameInstance::IsRunning())
+		{
+			GameInstance::Get().Update();
+		}
 	}
 
 	void FireblazeClient::Render()

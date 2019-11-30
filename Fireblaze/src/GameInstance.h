@@ -24,14 +24,22 @@ namespace Fireblaze
 
 		std::unique_ptr<FireblazeChat> m_ChatTerminal;
 
+		// Gameplay
+		Camera* m_MainCamera;
+		GameObject* m_Terrain;
+		SimplexNoise m_TerrainGenerator;
+
 	public:
 		GameInstance(Scene* gameScene);
 		void SetStateManager(StateManager& manager);
 
 		void Initialize();
+		void Update();
 
 		Scene& GetGameScene() const;
 		FireblazeChat& GetChatTerminal() const;
+
+		Camera& Get3dCamera() const;
 	};
 
 }

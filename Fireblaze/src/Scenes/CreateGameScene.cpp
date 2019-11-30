@@ -24,8 +24,14 @@ namespace Fireblaze
 				GameInstance::Delete();
 			});
 
+		LightSource sun;
+		sun.Position = Vector3f(0, 1000, 0);
+		sun.AmbientIntensity = 0.3f;
+
 		RenderSchedule schedule(scene);
-		schedule.AddRenderProcess({});
+		RenderProcess p;
+		p.Options.GlobalContext.Lights.push_back(sun);
+		schedule.AddRenderProcess(p);
 		SceneRenderer::Get().AddRenderSchedule(schedule);
 	}
 
