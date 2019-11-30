@@ -1,0 +1,3 @@
+[submodule "Bolt"]
+	path = Bolt
+	url = https://github.com/totomosic/Bolt
